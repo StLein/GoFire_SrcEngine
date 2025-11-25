@@ -8,6 +8,73 @@
 // Group definitions //
 ///////////////////////
 
+$Group "fire_engine"
+{
+	// lib
+	"tier0"
+	"tier1"
+	"tier2"
+	"tier3"
+	"mathlib"
+	
+	"vpklib"
+	"vstdlib"
+
+	// dll
+	"appframework"
+	"networksystem"
+	"filesystem_stdio"
+	//"shaderapidx9"
+	//"shaderlib"
+	//"shaderapiempty"
+}
+
+$Group "fire_game"
+{
+	// launcher
+	"launcher"
+	"launcher_main"
+
+	// srcds
+	"dedicated"
+	"dedicated_main"
+}
+
+$Group "fire_tools"
+{
+	// lib
+	"bitmap"
+	"commedit"
+	//"dme_controls"
+	//"toolutils"
+
+	"vpk"
+	"vtf"
+	"vtex_dll"
+	"studiorender"
+	//"studiomdl"
+
+	// vgui
+	"vgui_dll"
+	"vguimatsurface"
+	"vgui_surfacelib"
+
+	// hlmv
+	"hlmv"
+	"mxtoolkitwin32"
+
+	"zstd"
+	"datacache"
+	//"vbsp"
+	//"vbspinfo"
+	//"vvis_dll"
+	//"vvis_launcher"
+	//"vrad_dll"
+	"vrad_launcher"
+
+}
+
+
 $Group "gamedlls"
 {
 	"client"

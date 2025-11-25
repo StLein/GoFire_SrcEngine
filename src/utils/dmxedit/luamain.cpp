@@ -1,4 +1,4 @@
-//=============================================================================
+﻿//=============================================================================
 //
 //========= Copyright Valve Corporation, All rights reserved. ============//
 // The contents may be used and/or copied only with the written permission of
@@ -404,7 +404,7 @@ void CDmxEditApp::PrintHelp( bool bWiki /* = false */ )
 	}
 
 	Msg( "CREDITS\n" );
-	Msg( "    Lua Copyright � 1994-2006 Lua.org, PUC-Rio.\n ");
+	Msg( "    Lua Copyright © 1994-2006 Lua.org, PUC-Rio.\n ");
 
 	Msg( "\n" );
 }
