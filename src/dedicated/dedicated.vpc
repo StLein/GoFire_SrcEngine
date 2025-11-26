@@ -143,7 +143,7 @@ $Project "Dedicated"
 		$Lib	tier3
 		$Lib	vgui_controls [$WIN32]
 		$LibExternal "$SRCDIR/thirdparty/libedit-3.1/src/.libs/libedit" [$LINUXALL]
-		$ImpLibExternal steam_api
+		$ImpLibExternal "$LIBPUBLIC\x86\steam_api"
 		$ImpLib SDL2 [$SDL]
 	}
 }

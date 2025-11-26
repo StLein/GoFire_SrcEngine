@@ -7,7 +7,6 @@
 $Macro SRCDIR		"..\.."
 $Macro OUTBINDIR	"$SRCDIR\..\game\bin"
 $Macro OUTBINNAME   "bin\vpk_$PLATFORM"  [$LINUXALL||$OSXALL]
-$Macro DISABLE_FTOL3_OVERRIDE "1" [$VS2013||$VS2015]
 
 $Include "$SRCDIR\vpc_scripts\source_exe_con_base.vpc"
 $include "$SRCDIR\vpc_scripts\source_cryptlib_include.vpc"

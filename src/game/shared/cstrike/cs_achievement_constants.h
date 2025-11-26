@@ -1,10 +1,10 @@
-//========= Copyright Valve Corporation, All rights reserved. ============//
+﻿//========= Copyright Valve Corporation, All rights reserved. ============//
 //-------------------------------------------------------------
 // File:		cs_achievement_constants.h
 // Desc: 		Declare contants used by achievements (mostly) in one location for simpler tweaking
 // Author: 		Peter Freese <peter@hiddenpath.com>
 // Date: 		2009/03/11
-// Copyright:	� 2009 Hidden Path Entertainment
+// Copyright:	© 2009 Hidden Path Entertainment
 //-------------------------------------------------------------
 
 #ifndef CS_ACHIEVEMENT_CONSTANTS_H

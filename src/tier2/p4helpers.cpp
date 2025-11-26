@@ -86,14 +86,14 @@ bool CP4File::IsFileInPerforce()
 	return p4->IsFileInPerforce( m_sFilename.String() );
 }
 
-// lein: remove
-// bool CP4File::SetFileType(const CUtlString& desiredFileType)
-// {
-// 	if ( !p4 )
-// 		return false;
+bool CP4File::SetFileType(const CUtlString& desiredFileType)
+{
+	// lein: remove
+	return false;
+	// if ( !p4 ) return false;
 
-// 	return p4->SetFileType( m_sFilename.String(), desiredFileType.String() );
-// }
+	// return p4->SetFileType( m_sFilename.String(), desiredFileType.String() );
+}
 
 
 //////////////////////////////////////////////////////////////////////////

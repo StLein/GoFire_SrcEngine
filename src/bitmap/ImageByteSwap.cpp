@@ -22,8 +22,8 @@
 // manipulate 360 data, so there can be no reliance on WIN32 D3DFORMAT bits
 #pragma warning(push)
 #pragma warning(disable : 4458)  // warning C4530: C++ exception handler used, but unwind semantics are not enabled. Specify /EHsc (disabled due to std headers having exception syntax)
-#include "..\x360xdk\include\win32\vs2005\d3d9.h"
-#include "..\x360xdk\include\win32\vs2005\XGraphics.h"
+//#include "..\x360xdk\include\win32\vs2005\d3d9.h"
+//#include "..\x360xdk\include\win32\vs2005\XGraphics.h"
 #pragma warning(pop)
 #endif
 
@@ -88,7 +88,7 @@ namespace ImageLoader
 
 		Assert( IsFormatValidForConversion( imageFormat ) );
 
-#if !defined( DX_TO_GL_ABSTRACTION ) && !defined( NO_X360_XDK )
+#if !defined( DX_TO_GL_ABSTRACTION ) && !defined( NO_X360_XDK ) && defined( _X360 )
 		if ( IsPC() )
 		{
 			// running as a win32 tool, data is in expected order
@@ -137,7 +137,7 @@ namespace ImageLoader
 	{
 		Assert( IsFormatValidForConversion( imageFormat ) );
 
-#if !defined( DX_TO_GL_ABSTRACTION ) && !defined( NO_X360_XDK )
+#if !defined( DX_TO_GL_ABSTRACTION ) && !defined( NO_X360_XDK ) && defined( _X360 )
 		// It would have been nice to use the 360 D3DFORMAT bit encodings, but the codes
 		// are different for win32, and this routine is used by a win32 library to
 		// manipulate 360 data, so there can be no reliance on D3DFORMAT bits
@@ -201,7 +201,7 @@ namespace ImageLoader
 	{
 		Assert( IsFormatValidForConversion( imageFormat ) );
 
-#if !defined( DX_TO_GL_ABSTRACTION ) && !defined( NO_X360_XDK )
+#if !defined( DX_TO_GL_ABSTRACTION ) && !defined( NO_X360_XDK ) && defined( _X360 )
 		XGENDIANTYPE xEndian;
 		switch ( imageFormat )
 		{

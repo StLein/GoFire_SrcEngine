@@ -24,13 +24,12 @@ $Group "fire_engine"
 	"appframework"
 	"networksystem"
 	"filesystem_stdio"
-	//"shaderapidx9"
-	//"shaderlib"
-	//"shaderapiempty"
 }
 
-$Group "fire_game"
+$Group "game_cstrike"
 {
+	"engine"
+	
 	// launcher
 	"launcher"
 	"launcher_main"
@@ -38,33 +37,55 @@ $Group "fire_game"
 	// srcds
 	"dedicated"
 	"dedicated_main"
+	
+	"client"
+	"server"
+	"gameui"
+	"serverbrowser"
 }
 
 $Group "fire_tools"
 {
 	// lib
+    "zlib"
+	"zstd"
 	"bitmap"
-	"commedit"
+	// "socketlib"
+
+	//"commedit"
 	//"dme_controls"
 	//"toolutils"
 
 	"vpk"
 	"vtf"
 	"vtex_dll"
-	"studiorender"
+
+	// shader
+	"shaderlib"
+	"shaderapidx9"
+	"shaderapiempty"
+
+	"sourcevr"
+	"inputsystem"
+	"materialsystem"
+	"matsys_controls"
+
+	"hlmv"
+	"mxtoolkitwin32"
 	//"studiomdl"
+	"particles"
+	"studiorender"
+	"choreoobjects"
 
 	// vgui
 	"vgui_dll"
-	"vguimatsurface"
+	"vgui_controls"
 	"vgui_surfacelib"
+	"vguimatsurface"
 
-	// hlmv
-	"hlmv"
-	"mxtoolkitwin32"
-
-	"zstd"
+	"newdat"
 	"datacache"
+	"dmxloader"
 	//"vbsp"
 	//"vbspinfo"
 	//"vvis_dll"
@@ -72,6 +93,8 @@ $Group "fire_tools"
 	//"vrad_dll"
 	"vrad_launcher"
 
+	"video_webm"
+	"video_services"
 }
 
 

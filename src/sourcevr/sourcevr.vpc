@@ -62,11 +62,11 @@ $Project "SourceVR"
 
 	$Folder	"Link Libraries"
 	{
-		$ImpLibexternal openvr_api
+		$ImpLibexternal "$LIBPUBLIC\x86\openvr_api"
 		$Lib mathlib
 		$Lib tier2
 		$Lib tier3
 		$Lib appframework
-		$ImpLibexternal steam_api
+		$ImpLibExternal "$LIBPUBLIC\x86\steam_api"
 	}
 }

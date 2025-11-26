@@ -97,7 +97,7 @@ $Project "ServerBrowser"
 
 	$Folder "Link Libraries"
 	{
-		$ImpLib steam_api
+		$ImpLib "$LIBPUBLIC\x86\steam_api"
 		$Lib	tier2
 		$Lib	tier3
 		$Lib	vgui_controls

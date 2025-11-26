@@ -16,7 +16,7 @@ $Configuration
 {
 	$Compiler
 	{
-		$AdditionalIncludeDirectories	"$BASE;$SRCDIR\dx9sdk\include" [$WIN32 && !$GL]
+		$AdditionalIncludeDirectories	"$BASE;$SRCDIR\DX9SDK\Include" [$WIN32 && !$GL]
 		$AdditionalIncludeDirectories	"$BASE;$SRCDIR\x360xdk\include\xbox" [$X360]
 		$AdditionalIncludeDirectories	"$BASE;..\"
 		$PreprocessorDefinitions		"$BASE;SHADERAPIDX9;SHADER_DLL_EXPORT;PROTECTED_THINGS_ENABLE;strncpy=use_Q_strncpy_instead;_snprintf=use_Q_snprintf_instead"
@@ -130,8 +130,8 @@ $Project "shaderapidx9"
 	$Folder	"Link Libraries" [$WIN32]
 	{
 
-		$File	"$SRCDIR\dx9sdk\lib\d3d9.lib" [$WIN32 && !$GL]
-		$File	"$SRCDIR\dx9sdk\lib\d3dx9.lib" [$WIN32 && !$GL&&!$VS2015]
+		$File	"$SRCDIR\DX9SDK\Lib\x86\d3d9.lib" [$WIN32 && !$GL]
+		$File	"$SRCDIR\DX9SDK\Lib\x86\d3dx9.lib" [$WIN32 && !$GL&&!$VS2015]
 		$File	"$LIBCOMMON\d3dx9.lib" [$WIN32 && !$GL &&$VS2015]
 	}
 	

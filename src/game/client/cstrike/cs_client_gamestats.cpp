@@ -1,10 +1,10 @@
-//========= Copyright Valve Corporation, All rights reserved. ============//
+﻿//========= Copyright Valve Corporation, All rights reserved. ============//
 //-------------------------------------------------------------
 // File:		cs_client_gamestats.cpp
 // Desc: 		Manages client side stat storage, accumulation, and access
 // Author: 		Peter Freese <peter@hiddenpath.com>
 // Date: 		2009/09/11
-// Copyright:	� 2009 Hidden Path Entertainment
+// Copyright:	© 2009 Hidden Path Entertainment
 //
 // Keywords: 	
 //-------------------------------------------------------------

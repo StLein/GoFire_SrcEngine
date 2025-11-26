@@ -16,7 +16,7 @@ $Configuration
 {
 	$Compiler
 	{
-		$AdditionalIncludeDirectories	"$BASE;$SRCDIR\dx9sdk\include"			[$WIN32]
+		$AdditionalIncludeDirectories	"$BASE;$SRCDIR\DX9SDK\Include"			[$WIN32]
 		$AdditionalIncludeDirectories	"$BASE;$SRCDIR\thirdparty\libvpx-v1.1.0"
 		$AdditionalIncludeDirectories	"$BASE;$SRCDIR\thirdparty\libvorbis-1.3.2\include"
 		$AdditionalIncludeDirectories	"$BASE;$SRCDIR\thirdparty\libwebm"
@@ -28,7 +28,7 @@ $Configuration
 		$AdditionalDependencies				"$BASE vfw32.lib" [$WIN32]
 		$SystemLibraries                    "iconv" [$OSXALL]
 		$SystemFrameworks					"Carbon" [$OSXALL]
-		$AdditionalLibraryDirectories		"$BASE;$SRCDIR\dx9sdk\lib"	[$WIN32]
+		$AdditionalLibraryDirectories		"$BASE;$SRCDIR\DX9SDK\Lib\x86\lib"	[$WIN32]
 	}
 }
 

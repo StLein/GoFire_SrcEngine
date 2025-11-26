@@ -249,8 +249,10 @@ $Project "GameUI"
 		$Lib	vgui_controls
 		$Lib	vtf
 		$Lib  	"$LIBCOMMON/libjpeg"		[!$DEDICATED]
-		$ImpLib	steam_api
-		$Lib libpng [!$VS2015&&!$DEDICATED]
+		
+		$ImpLib "$LIBPUBLIC\x86\steam_api"
+		$ImpLib "$LIBPUBLIC\x86\libpng"	[!$VS2015&&!$DEDICATED]
+
 		$Lib $LIBCOMMON/libpng [$VS2015&&!$DEDICATED]
 		$Lib libz [!$DEDICATED]
 		$ImpLib SDL2 [$SDL]

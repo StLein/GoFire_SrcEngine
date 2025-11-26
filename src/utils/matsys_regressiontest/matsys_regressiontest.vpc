@@ -19,7 +19,7 @@ $Configuration
 
 	$Linker
 	{
-		$AdditionalDependencies				"$BASE $SRCDIR\lib\public\nvtc.lib"
+		$AdditionalDependencies				"$BASE $LIBPUBLIC\x86\nvtc.lib"
 	}
 }
 

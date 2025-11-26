@@ -49,7 +49,7 @@ $Project "inputsystem"
 	{
 		$Lib	tier1
 		$Lib	tier2
-		$ImpLib SDL2
-		$Implib	"steam_api"						[($WIN32||$WIN64||$POSIX||$PS3)&&!$NO_STEAM]
+		$ImpLib "$LIBPUBLIC\x86\SDL2"
+		$ImpLib "$LIBPUBLIC\x86\steam_api"	[($WIN32||$WIN64||$POSIX||$PS3)&&!$NO_STEAM]
 	}
 }

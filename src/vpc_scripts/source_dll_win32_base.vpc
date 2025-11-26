@@ -15,7 +15,6 @@ $Macro LIBPUBLIC	"$SRCDIR\lib\public$PLATSUBDIR"
 $Macro LIBCOMMON	"$SRCDIR\lib\common$PLATSUBDIR" [!$VS2015]
 $Macro LIBCOMMON	"$SRCDIR\lib\common$PLATSUBDIR\2015\release" [$VS2015&&!$WIN32]
 $Macro LIBCOMMON	"$SRCDIR\lib\common\win32\2015\release" [$VS2015&&$WIN32]
-$Macro DISABLE_FTOL3_OVERRIDE "1" [$VS2013||$VS2015]
 
 $Include "$SRCDIR\vpc_scripts\loadaddress.vpc"
 $Include "$SRCDIR\vpc_scripts\source_dll_win32_debug.vpc"
@@ -53,7 +52,7 @@ $Configuration
 		// Suppress this pointless warning using the undocumented /ignore linker switch
 		// schemalib.lib(schemaclassinfo.obj) : warning LNK4221: This object file does not define any previously undefined public symbols, so it will not be used by any link operation that consumes this library
 		$AdditionalOptions					"$BASE /ignore:4221"
-		$AdditionalOptions					"$BASE $SRCDIR\lib\public\ftol3.obj" [$VS2013 && $WIN32 && !$DISABLE_FTOL3_OVERRIDE && !$SOURCESDK] // Work around CRT bug https://connect.microsoft.com/VisualStudio/feedback/details/806362/vc12-pollutes-the-floating-point-stack-when-casting-infinity-nan-to-unsigned-long#
+		// $AdditionalOptions					"$BASE $SRCDIR\lib\public\ftol3.obj" [$VS2013 && $WIN32 && !$DISABLE_FTOL3_OVERRIDE && !$SOURCESDK] // Work around CRT bug https://connect.microsoft.com/VisualStudio/feedback/details/806362/vc12-pollutes-the-floating-point-stack-when-casting-infinity-nan-to-unsigned-long#
 	}
 	
 	$PreBuildEvent

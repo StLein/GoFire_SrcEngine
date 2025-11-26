@@ -17,8 +17,8 @@ $Configuration
 	$Compiler
 	{
 		$AdditionalIncludeDirectories	"$BASE;.\;audio;audio\private;audio\public;$SRCDIR\vgui2\include;$SRCDIR\vgui2\controls"
-		$AdditionalIncludeDirectories	"$BASE;$SRCDIR\dx9sdk\include" [$WINDOWS]
-		$PreprocessorDefinitions		"$BASE;USE_CONVARS;VOICE_OVER_IP;BUMPMAP;__USEA3D;_ADD_EAX_;ENGINE_DLL;VERSION_SAFE_STEAM_API_INTERFACES;USE_BREAKPAD_HANDLER"
+		$AdditionalIncludeDirectories	"$BASE;$SRCDIR\DX9SDK\Include" [$WINDOWS]
+		$PreprocessorDefinitions		"$BASE;USE_CONVARS;NEW_DXSDK;VOICE_OVER_IP;BUMPMAP;__USEA3D;_ADD_EAX_;ENGINE_DLL;VERSION_SAFE_STEAM_API_INTERFACES;USE_BREAKPAD_HANDLER"
 		$PreprocessorDefinitions		"$BASE;DEDICATED;SWDS" [$DEDICATED]
 		$PreprocessorDefinitions		"$BASE;USE_WEBM_FOR_REPLAY" [$LINUXALL]
 
@@ -37,7 +37,7 @@ $Configuration
 	$Linker
 	{
 		$AdditionalDependencies			"$BASE dinput8.lib winmm.lib wsock32.lib ws2_32.lib wininet.lib vfw32.lib Rpcrt4.lib" [$WINDOWS]
-		$AdditionalLibraryDirectories	"$BASE;$SRCDIR\lib\common\vc7;$SRCDIR\dx9sdk\lib" [$WINDOWS]
+		$AdditionalLibraryDirectories	"$BASE;$SRCDIR\lib\common\vc7;$SRCDIR\DX9SDK\Lib\x86" [$WINDOWS]
 		$SystemFrameworks				"Carbon;AppKit;OpenAL;CoreAudio;AudioToolbox;SystemConfiguration;Quicktime;AudioUnit" [$OSXALL]
 		$SystemLibraries				"iconv" [$OSXALL]
 		$SystemLibraries				"rt;openal;curl-gnutls" [$LINUXALL]
@@ -1095,7 +1095,7 @@ $Project "engine"
 
 	$Folder	"Link libraries"
 	{
-		$Lib	socketlib [$WIN32]
+		// $Lib	socketlib [$WIN32]
 
 		$Lib	appframework
 		$Lib	bitmap
@@ -1110,7 +1110,7 @@ $Project "engine"
 		$Lib	vtf
 		$Lib	vgui_controls						[!$DEDICATED]
 
-		$ImpLibexternal steam_api
+		$ImpLibExternal "$LIBPUBLIC\x86\steam_api"
 
 		$ImpLib	"$LIBCOMMON\curl"	  [$OSXALL]
 
@@ -1124,7 +1124,7 @@ $Project "engine"
 		$Lib	"$LIBCOMMON/binkw32"					[$WIN32&&!$QUICKTIME_WIN32]
 		$File   "$LIBCOMMON\quicktime\QTMLClient"       [$WIN32&&$QUICKTIME_WIN32]
 		$ImpLib	"SDL2" [$SDL]
-		$File	"$SRCDIR\DX9SDK\lib\dsound.lib" [$WIN32]
-		$File	"$SRCDIR\DX9SDK\lib\dxguid.lib" [$WIN32]
+		$File	"$SRCDIR\DX9SDK\Lib\x86\dsound.lib" [$WIN32]
+		$File	"$SRCDIR\DX9SDK\Lib\x86\dxguid.lib" [$WIN32]
 	}	
 }

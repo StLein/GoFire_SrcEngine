@@ -96,6 +96,6 @@ $Project "Panel_zoo"
 		$Lib tier3
 		$Lib vgui_controls
 		$Lib mathlib
-		$ImpLibexternal steam_api
+		$ImpLibExternal "$LIBPUBLIC\x86\steam_api"
 	}
 }
