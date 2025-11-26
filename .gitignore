@@ -101,8 +101,6 @@ src/lib/public/vgui_controls.lib
 [Rr]elease_*/
 [Rr]elease/
 [Rr]eleases/
-x64/
-x86/
 bld/
 [Oo]bj/
 [Ll]og/
