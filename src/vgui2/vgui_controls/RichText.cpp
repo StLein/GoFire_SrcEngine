@@ -2528,7 +2528,7 @@ void RichText::InsertPossibleURLString(const char* text, Color URLTextColor, Col
 //-----------------------------------------------------------------------------
 // Purpose: looks for URLs in the string and returns information about the URL
 //-----------------------------------------------------------------------------
-int RichText::ParseTextStringForUrls( const char *text, int startPos, char *pchURLText, int cchURLText, char *pchURL, int cchURL, bool &clickable )
+int RichText::ParseTextStringForUrls( const char *text, intp startPos, char *pchURLText, intp cchURLText, char *pchURL, intp cchURL, bool &clickable )
 {
 	// scan for text that looks like a URL
 	int i = startPos;

@@ -18,6 +18,7 @@ $Configuration
 	}
 	$Linker
 	{
+		$AdditionalDependencies		"$BASE User32.lib" [$WINDOWS]
 		$SystemLibraries                                                        "iconv" [$OSXALL]
 		$SystemFrameworks			"IOKit;Carbon;ForceFeedback"
 	}
@@ -30,7 +31,7 @@ $Project "inputsystem"
 		$File	"inputsystem.cpp"
 		$File	"inputsystem.h"
 		$File	"joystick_sdl.cpp"
-		$File	"novint.cpp"			[$WIN32]
+		$File	"novint.cpp"			[$WINDOWS]
 		$File	"key_translation.cpp"
 		$File	"key_translation.h"
 		$File	"steamcontroller.cpp"
@@ -42,14 +43,14 @@ $Project "inputsystem"
 		$File	"$SRCDIR\public\inputsystem\ButtonCode.h"
 		$File	"$SRCDIR\public\inputsystem\iinputsystem.h"
 		$File	"$SRCDIR\public\inputsystem\InputEnums.h"
-		$File	"$SRCDIR\dx9sdk\include\xinput.h" [$WIN32]
+		$File	"$SRCDIR\dx9sdk\include\xinput.h" [$WINDOWS]
 	}
 
 	$Folder	"Link Libraries"
 	{
 		$Lib	tier1
 		$Lib	tier2
-		$ImpLib "$LIBPUBLIC\x86\SDL2"
-		$ImpLib "$LIBPUBLIC\x86\steam_api"	[($WIN32||$WIN64||$POSIX||$PS3)&&!$NO_STEAM]
+		$ImpLib "$LIB3RDPARTY\SDL2"
+		$ImpLib "$LIB3RDPARTY\steam_api"	[($WIN32||$WIN64||$POSIX||$PS3)&&!$NO_STEAM]
 	}
 }

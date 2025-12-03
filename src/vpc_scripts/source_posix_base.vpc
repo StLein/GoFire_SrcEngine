@@ -3,6 +3,7 @@ $Include "$SRCDIR\vpc_scripts\version.vpc"
 
 $Macro LIBPUBLIC	"$SRCDIR\lib\public$PLATSUBDIR"
 $Macro LIBCOMMON	"$SRCDIR\lib\common$PLATSUBDIR"
+$Macro LIB3RDPARTY	"$SRCDIR\lib\thirdparty$PLATSUBDIR"
 
 $MacroRequired				"SRCDIR"
 

@@ -110,7 +110,7 @@ $Project "client"
 	"game\client\client_episodic.vpc"	[($WIN32||$X360||$POSIX) && $EPISODIC]
 	"game\client\client_lostcoast.vpc"	[($WIN32||$POSIX) && $LOSTCOAST]
 	"game\client\client_tf.vpc"			[($WINDOWS||$X360||$POSIX) && $TF]
-	"game\client\client_cstrike.vpc"	[($WIN32||$POSIX) && $CSTRIKE]
+	"game\client\client_cstrike.vpc"	[($WINDOWS||$POSIX) && $CSTRIKE]
 	"game\client\client_portal.vpc"		[($WIN32||$X360||$POSIX) && $PORTAL]
 	"game\client\client_hl2mp.vpc"		[($WIN32||$POSIX) && $HL2MP]
 	"game\client\client_hl1.vpc"		[($WIN32||$POSIX) && $HL1]
@@ -159,12 +159,12 @@ $Project "dbmon"
 
 $Project "dedicated"
 {
-	"dedicated\dedicated.vpc" [$WIN32||$POSIX]
+	"dedicated\dedicated.vpc" [$WINDOWS||$POSIX]
 }
 
 $Project "dedicated_main"
 {
-	"dedicated_main\dedicated_main.vpc" [$WIN32||$POSIX]
+	"dedicated_main\dedicated_main.vpc" [$WINDOWS||$POSIX]
 }
 
 $Project "demoinfo"
@@ -442,7 +442,7 @@ $Project "server"
 	"game\server\server_episodic.vpc"	[($WIN32||$X360||$POSIX) && $EPISODIC]
 	"game\server\server_lostcoast.vpc"	[($WIN32||$POSIX) && $LOSTCOAST]
 	"game\server\server_tf.vpc"			[($WINDOWS||$X360||$POSIX) && $TF]
-	"game\server\server_cstrike.vpc"	[($WIN32||$POSIX) && $CSTRIKE]
+	"game\server\server_cstrike.vpc"	[($WINDOWS||$POSIX) && $CSTRIKE]
 	"game\server\server_portal.vpc"		[($WIN32||$X360||$POSIX) && $PORTAL]
 	"game\server\server_hl2mp.vpc"		[($WIN32||$POSIX) && $HL2MP]
 	"game\server\server_hl1.vpc"		[($WIN32||$POSIX) && $HL1]
@@ -711,7 +711,7 @@ $Project "networktest"
 
 $Project "newdat"
 {
-	"utils\newdat\newdat.vpc" [$WIN32]
+	"utils\newdat\newdat.vpc" [$WINDOWS]
 }
 
 $Project "normal2ssbump"

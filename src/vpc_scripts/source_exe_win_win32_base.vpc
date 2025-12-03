@@ -12,6 +12,7 @@ $MacroRequired				"OUTBINDIR"
 
 $Macro OUTBINDIR	"$OUTBINDIR$PLATSUBDIR"
 $Macro LIBPUBLIC	"$SRCDIR\lib\public$PLATSUBDIR"
+$Macro LIB3RDPARTY	"$SRCDIR\lib\thirdparty$PLATSUBDIR"
 $Macro LIBCOMMON	"$SRCDIR\lib\common$PLATSUBDIR" [!$VS2015]
 $Macro LIBCOMMON	"$SRCDIR\lib\common$PLATSUBDIR\2015\release" [$VS2015&&!$WIN32]
 $Macro LIBCOMMON	"$SRCDIR\lib\common\win32\2015\release" [$VS2015&&$WIN32]
@@ -46,7 +47,7 @@ $Configuration
 	
 	$Linker
 	{
-		$AdditionalDependencies				"$BASE shell32.lib user32.lib advapi32.lib gdi32.lib comdlg32.lib ole32.lib" [$WIN32]
+		$AdditionalDependencies				"$BASE shell32.lib user32.lib advapi32.lib gdi32.lib comdlg32.lib ole32.lib" [$WINDOWS]
 		$TargetMachine						"MachineX86 (/MACHINE:X86)"	[$WIN32]
 		$TargetMachine						"MachineX64 (/MACHINE:X64)"	[$WIN64]
 		// NXCOMPAT (also known as DEP or Data Access Protection) should be enabled for all

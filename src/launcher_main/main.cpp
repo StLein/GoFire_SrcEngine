@@ -50,6 +50,42 @@ extern "C" { __declspec( dllexport ) int AmdPowerXpressRequestHighPerformance = 
 #endif
 
 
+#if PLATFORM_WINDOWS_PC
+
+# if PLATFORM_64BITS
+#  define PLATFORM_DIR "\\x64"
+# else
+#  define PLATFORM_DIR ""
+# endif
+
+//#elif PLATFORM_LINUX
+#elif LINUX
+
+# if PLATFORM_64BITS
+#  define PLATFORM_DIR "/linux64"
+# else
+#  define PLATFORM_DIR ""
+# endif
+
+//#elif PLATFORM_OSX
+#elif OSX
+
+#if PLATFORM_ARM
+#  define PLATFORM_DIR "/osxarm64"
+#else
+# if PLATFORM_64BITS
+#  define PLATFORM_DIR "/osx64"
+# else
+#  define PLATFORM_DIR ""
+# endif
+#endif
+
+#else
+# error "Define a platform dir for me!"
+#endif
+
+#define PLATFORM_BIN_DIR "bin" PLATFORM_DIR
+
 //-----------------------------------------------------------------------------
 // Purpose: Return the directory where this .exe is running from
 // Output : char
@@ -108,20 +144,22 @@ int APIENTRY WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
 #ifdef _DEBUG
 	int len = 
 #endif
-	_snprintf( szBuffer, sizeof( szBuffer ), "PATH=%s\\bin\\;%s", pRootDir, pPath );
+	_snprintf( szBuffer, sizeof( szBuffer ), "PATH=%s\\%s\\;%s", pRootDir, PLATFORM_BIN_DIR, pPath );
 	szBuffer[sizeof( szBuffer ) - 1] = '\0';
 	assert( len < sizeof( szBuffer ) );
 	_putenv( szBuffer );
 
 	// Assemble the full path to our "launcher.dll"
-	_snprintf( szBuffer, sizeof( szBuffer ), "%s\\bin\\launcher.dll", pRootDir );
-	szBuffer[sizeof( szBuffer ) - 1] = '\0';
+  	char launcher_dll_path[MAX_PATH];
+  	_snprintf_s(launcher_dll_path, _TRUNCATE, "%s\\" PLATFORM_BIN_DIR "\\launcher.dll", pRootDir);
+	// _snprintf( szBuffer, sizeof( szBuffer ), "%s\\bin\\launcher.dll", pRootDir );
+	// szBuffer[sizeof( szBuffer ) - 1] = '\0';
 
 	// STEAM OK ... filesystem not mounted yet
 #if defined(_X360)
-	HINSTANCE launcher = LoadLibrary( szBuffer );
+	HINSTANCE launcher = LoadLibrary(launcher_dll_path);
 #else
-	HINSTANCE launcher = LoadLibraryEx( szBuffer, NULL, LOAD_WITH_ALTERED_SEARCH_PATH );
+	HINSTANCE launcher = LoadLibraryEx(launcher_dll_path, NULL, LOAD_WITH_ALTERED_SEARCH_PATH );
 #endif
 	if ( !launcher )
 	{
@@ -129,7 +167,7 @@ int APIENTRY WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
 		FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, NULL, GetLastError(), MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPTSTR)&pszError, 0, NULL);
 
 		char szBuf[1024];
-		_snprintf(szBuf, sizeof( szBuf ), "Failed to load the launcher DLL:\n\n%s", pszError);
+		_snprintf(szBuf, sizeof( szBuf ), "Failed to load the launcher DLL: \n\n%s%s",  pszError, launcher_dll_path);
 		szBuf[sizeof( szBuf ) - 1] = '\0';
 		MessageBox( 0, szBuf, "Launcher Error", MB_OK );
 

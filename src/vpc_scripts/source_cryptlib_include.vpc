@@ -26,7 +26,6 @@ $Project
 	{
 		$Lib	vpklib
 		// So we can check the signature of the item schema.
-		$Lib	"$SRCDIR\lib\public\$PLATSUBDIR\2013\release\cryptlib" [$WINDOWS&&!$VS2015]
 		$Libexternal $LIBCOMMON/libcrypto [$OSXALL]
 		$Libexternal $LIBCOMMON/libcryptopp [$OSXALL]
 		$Libexternal "$SRCDIR\lib\common\$(CRYPTOPPDIR)\libcrypto" [$LINUXALL]

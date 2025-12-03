@@ -3,8 +3,10 @@
 // Purpose: 
 //
 //===========================================================================//
+#include "tier1/interface.h"
+
 #if defined( _WIN32 ) && !defined( _X360 )
-#include <windows.h>
+#include "winlite.h"
 #endif
 
 #if !defined( DONT_PROTECT_FILEIO_FUNCTIONS )
@@ -15,16 +17,17 @@
 #undef PROTECTED_THINGS_ENABLE // from protected_things.h
 #endif
 
-#include <stdio.h>
-#include "interface.h"
-#include "basetypes.h"
+#include <cstdio>
+#include <cstring>
+#include <cstdlib>
+#include <system_error>
+
+#include "tier0/basetypes.h"
 #include "tier0/dbg.h"
-#include <string.h>
-#include <stdlib.h>
-#include "tier1/strtools.h"
 #include "tier0/icommandline.h"
-#include "tier0/dbg.h"
 #include "tier0/threadtools.h"
+#include "tier1/strtools.h"
+
 #ifdef _WIN32
 #include <direct.h> // getcwd
 #elif POSIX
@@ -32,10 +35,6 @@
 #include <unistd.h>
 #define _getcwd getcwd
 #endif
-#if defined( _X360 )
-#include "xbox/xbox_win32stubs.h"
-#endif
-
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
@@ -43,7 +42,7 @@
 // ------------------------------------------------------------------------------------ //
 // InterfaceReg.
 // ------------------------------------------------------------------------------------ //
-InterfaceReg *InterfaceReg::s_pInterfaceRegs = NULL;
+InterfaceReg *InterfaceReg::s_pInterfaceRegs = nullptr;
 
 InterfaceReg::InterfaceReg( InstantiateInterfaceFn fn, const char *pName ) :
 	m_pName(pName)
@@ -67,9 +66,7 @@ InterfaceReg::InterfaceReg( InstantiateInterfaceFn fn, const char *pName ) :
 // ------------------------------------------------------------------------------------ //
 void* CreateInterfaceInternal( const char *pName, int *pReturnCode )
 {
-	InterfaceReg *pCur;
-	
-	for (pCur=InterfaceReg::s_pInterfaceRegs; pCur; pCur=pCur->m_pNext)
+	for (auto *pCur=InterfaceReg::s_pInterfaceRegs; pCur; pCur=pCur->m_pNext)
 	{
 		if (strcmp(pCur->m_pName, pName) == 0)
 		{
@@ -85,7 +82,8 @@ void* CreateInterfaceInternal( const char *pName, int *pReturnCode )
 	{
 		*pReturnCode = IFACE_FAILED;
 	}
-	return NULL;	
+
+	return nullptr;
 }
 
 void* CreateInterface( const char *pName, int *pReturnCode )
@@ -110,7 +108,7 @@ void *GetModuleHandle(const char *name)
 
     if( (handle=dlopen(name, RTLD_NOW))==NULL)
     {
-            printf("DLOPEN Error:%s\n",dlerror());
+            fprintf(stderr, "DLOPEN Error:%s\n",dlerror());
             // couldn't open this file
             return NULL;
     }
@@ -124,8 +122,7 @@ void *GetModuleHandle(const char *name)
 #endif
 
 #if defined( _WIN32 ) && !defined( _X360 )
-#define WIN32_LEAN_AND_MEAN
-#include "windows.h"
+#include "winlite.h"
 #endif
 
 //-----------------------------------------------------------------------------
@@ -135,9 +132,9 @@ void *GetModuleHandle(const char *name)
 //-----------------------------------------------------------------------------
 static void *Sys_GetProcAddress( const char *pModuleName, const char *pName )
 {
-	HMODULE hModule = (HMODULE)GetModuleHandle( pModuleName );
+	auto hModule = (HMODULE)GetModuleHandle(pModuleName);
 #ifdef WIN32
-	return (void *)GetProcAddress( hModule, pName );
+	return hModule ? (void *)GetProcAddress( hModule, pName ) : nullptr;
 #else
 	return (void *)dlsym( (void *)hModule, pName );
 #endif
@@ -170,18 +167,17 @@ struct ThreadedLoadLibaryContext_t
 // wraps LoadLibraryEx() since 360 doesn't support that
 static HMODULE InternalLoadLibrary( const char *pName, Sys_Flags flags )
 {
-#if defined(_X360)
-	return LoadLibrary( pName );
-#else
 	if ( flags & SYS_NOLOAD )
 		return GetModuleHandle( pName );
 	else
-		return LoadLibraryEx( pName, NULL, LOAD_WITH_ALTERED_SEARCH_PATH );
-#endif
+		return LoadLibraryExA( pName, nullptr, LOAD_WITH_ALTERED_SEARCH_PATH );
 }
+
 unsigned ThreadedLoadLibraryFunc( void *pParam )
 {
-	ThreadedLoadLibaryContext_t *pContext = (ThreadedLoadLibaryContext_t*)pParam;
+	// dimhotepus: Add thread name to aid debugging.
+	ThreadSetDebugName("ModuleLoader");
+	auto *pContext = (ThreadedLoadLibaryContext_t*)pParam;
 	pContext->m_hLibrary = InternalLoadLibrary( pContext->m_pLibraryName, SYS_NOFLAGS );
 	return 0;
 }
@@ -196,25 +192,15 @@ HMODULE Sys_LoadLibrary( const char *pLibraryName, Sys_Flags flags )
 	const char *pDllStringExtension = V_GetFileExtension( DLL_EXT_STRING );
 	const char *pModuleExtension = pDllStringExtension ? ( pDllStringExtension - 1 ) : DLL_EXT_STRING;
 
-	Q_strncpy( str, pLibraryName, sizeof(str) );
+	V_strcpy_safe( str, pLibraryName );
 
-	if ( IsX360() )
-	{
-		// old, probably busted, behavior for xbox
-		if ( !Q_stristr( str, pModuleExtension ) )
-		{
-			V_SetExtension( str, pModuleExtension, sizeof(str) );
-		}
-	}
-	else
-	{
-		// always force the final extension to be .dll
-		V_SetExtension( str, pModuleExtension, sizeof(str) );
-	}
+	// always force the final extension to be .dll
+	V_SetExtension( str, pModuleExtension );
 
 	Q_FixSlashes( str );
 
 #ifdef _WIN32
+	if(true) return InternalLoadLibrary(str, flags);
 	ThreadedLoadLibraryFunc_t threadFunc = GetThreadedLoadLibraryFunc();
 	if ( !threadFunc )
 		return InternalLoadLibrary( str, flags );
@@ -224,13 +210,9 @@ HMODULE Sys_LoadLibrary( const char *pLibraryName, Sys_Flags flags )
 
 	ThreadedLoadLibaryContext_t context;
 	context.m_pLibraryName = str;
-	context.m_hLibrary = 0;
+	context.m_hLibrary = nullptr;
 
 	ThreadHandle_t h = CreateSimpleThread( ThreadedLoadLibraryFunc, &context );
-
-#ifdef _X360
-	ThreadSetAffinity( h, XBOX_PROCESSOR_3 );
-#endif
 
 	unsigned int nTimeout = 0;
 	while( ThreadWaitForObject( h, true, nTimeout ) == TW_TIMEOUT )
@@ -273,35 +255,36 @@ CSysModule *Sys_LoadModule( const char *pModuleName, Sys_Flags flags /* = SYS_NO
 	// file in the depot (MFP) or a filesystem GetLocalCopy() call must be made
 	// prior to the call to this routine.
 	char szCwd[1024];
-	HMODULE hDLL = NULL;
+	HMODULE hDLL = nullptr;
 
 	if ( !Q_IsAbsolutePath( pModuleName ) )
 	{
 		// full path wasn't passed in, using the current working dir
-		_getcwd( szCwd, sizeof( szCwd ) );
-		if ( IsX360() )
+		if ( !_getcwd( szCwd, sizeof( szCwd ) ) )
 		{
-			int i = CommandLine()->FindParm( "-basedir" );
-			if ( i )
-			{
-				V_strcpy_safe( szCwd, CommandLine()->GetParm( i + 1 ) );
-			}
+			const auto error = std::generic_category().message(errno);
+			Warning( "Failed to load %s: %s\n", pModuleName, error.c_str() );
+			return nullptr;
 		}
-		if (szCwd[strlen(szCwd) - 1] == '/' || szCwd[strlen(szCwd) - 1] == '\\' )
+
+		size_t cCwd = strlen( szCwd );
+		if ( cCwd > 0 && (szCwd[cCwd - 1] == '/' || szCwd[cCwd - 1] == '\\') )
 		{
-			szCwd[strlen(szCwd) - 1] = 0;
+			szCwd[cCwd - 1] = '\0';
 		}
 
 		char szAbsoluteModuleName[1024];
-		size_t cCwd = strlen( szCwd );
-		if ( strstr( pModuleName, "bin/") == pModuleName || ( szCwd[ cCwd - 1 ] == 'n'  && szCwd[ cCwd - 2 ] == 'i' && szCwd[ cCwd - 3 ] == 'b' )  )
+		cCwd = strlen( szCwd );
+		if ( strstr( pModuleName, "bin/") == pModuleName ||
+			( cCwd > 2 && szCwd[ cCwd - 1 ] == 'n' && szCwd[ cCwd - 2 ] == 'i' && szCwd[ cCwd - 3 ] == 'b' ) )
 		{
 			// don't make bin/bin path
-			Q_snprintf( szAbsoluteModuleName, sizeof(szAbsoluteModuleName), "%s/%s", szCwd, pModuleName );			
+			Q_snprintf( szAbsoluteModuleName, sizeof(szAbsoluteModuleName), "%s/%s", szCwd, pModuleName );
 		}
 		else
 		{
-			Q_snprintf( szAbsoluteModuleName, sizeof(szAbsoluteModuleName), "%s/bin/%s", szCwd, pModuleName );
+			// dimhotepus: x86-64 support.
+			V_sprintf_safe( szAbsoluteModuleName, "%s" CORRECT_PATH_SEPARATOR_S PLATFORM_BIN_DIR CORRECT_PATH_SEPARATOR_S "%s", szCwd, pModuleName );
 		}
 		hDLL = Sys_LoadLibrary( szAbsoluteModuleName, flags );
 	}
@@ -310,34 +293,18 @@ CSysModule *Sys_LoadModule( const char *pModuleName, Sys_Flags flags /* = SYS_NO
 	{
 		// full path failed, let LoadLibrary() try to search the PATH now
 		hDLL = Sys_LoadLibrary( pModuleName, flags );
-#if defined( _DEBUG )
+//#if defined( _DEBUG )
 		if ( !hDLL )
 		{
-// So you can see what the error is in the debugger...
+			// So you can see what the error is in the debugger...
 #if defined( _WIN32 ) && !defined( _X360 )
-			char *lpMsgBuf;
-			
-			FormatMessage( 
-				FORMAT_MESSAGE_ALLOCATE_BUFFER | 
-				FORMAT_MESSAGE_FROM_SYSTEM | 
-				FORMAT_MESSAGE_IGNORE_INSERTS,
-				NULL,
-				GetLastError(),
-				MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
-				(LPTSTR) &lpMsgBuf,
-				0,
-				NULL 
-			);
-
-			LocalFree( (HLOCAL)lpMsgBuf );
-#elif defined( _X360 )
-			DWORD error = GetLastError();
-			Msg( "Error(%d) - Failed to load %s:\n", error, pModuleName );
+			const auto error = std::system_category().message(::GetLastError());
+			Warning( "Failed to load %s: %s\n", pModuleName, error.c_str() );
 #else
-			Msg( "Failed to load %s: %s\n", pModuleName, dlerror() );
+			Warning( "Failed to load %s: %s\n", pModuleName, dlerror() );
 #endif // _WIN32
 		}
-#endif // DEBUG
+//#endif // DEBUG
 	}
 
 #if !defined(LINUX)
@@ -356,15 +323,6 @@ CSysModule *Sys_LoadModule( const char *pModuleName, Sys_Flags flags /* = SYS_NO
 		if ( !s_bRunningWithDebugModules )
 		{
 			s_bRunningWithDebugModules = true;
-			
-#if 0 //def IS_WINDOWS_PC
-			char chMemoryName[ MAX_PATH ];
-			DebugKernelMemoryObjectName( chMemoryName );
-			
-			(void) CreateFileMapping( INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE, 0, 1024, chMemoryName );
-			// Created a shared memory kernel object specific to process id
-			// Existence of this object indicates that we have debug modules loaded
-#endif
 		}
 	}
 #endif
@@ -405,7 +363,7 @@ void Sys_UnloadModule( CSysModule *pModule )
 	if ( !pModule )
 		return;
 
-	HMODULE	hDLL = reinterpret_cast<HMODULE>(pModule);
+	auto	hDLL = reinterpret_cast<HMODULE>(pModule);
 
 #ifdef _WIN32
 	FreeLibrary( hDLL );
@@ -423,11 +381,14 @@ void Sys_UnloadModule( CSysModule *pModule )
 CreateInterfaceFn Sys_GetFactory( CSysModule *pModule )
 {
 	if ( !pModule )
-		return NULL;
+		return nullptr;
 
-	HMODULE	hDLL = reinterpret_cast<HMODULE>(pModule);
+	auto	hDLL = reinterpret_cast<HMODULE>(pModule);
 #ifdef _WIN32
+	SRC_GCC_BEGIN_WARNING_OVERRIDE_SCOPE()
+	SRC_GCC_DISABLE_CAST_FUNCTION_TYPE_MISMATCH_WARNING()
 	return reinterpret_cast<CreateInterfaceFn>(GetProcAddress( hDLL, CREATEINTERFACE_PROCNAME ));
+	SRC_GCC_END_WARNING_OVERRIDE_SCOPE()
 #elif defined(POSIX)
 	// Linux gives this error:
 	//../public/interface.cpp: In function `IBaseInterface *(*Sys_GetFactory
@@ -444,7 +405,7 @@ CreateInterfaceFn Sys_GetFactory( CSysModule *pModule )
 // Purpose: returns the instance of this module
 // Output : interface_instance_t
 //-----------------------------------------------------------------------------
-CreateInterfaceFn Sys_GetFactoryThis( void )
+CreateInterfaceFn Sys_GetFactoryThis()
 {
 	return &CreateInterfaceInternal;
 }
@@ -457,7 +418,7 @@ CreateInterfaceFn Sys_GetFactoryThis( void )
 CreateInterfaceFn Sys_GetFactory( const char *pModuleName )
 {
 #ifdef _WIN32
-	return static_cast<CreateInterfaceFn>( Sys_GetProcAddress( pModuleName, CREATEINTERFACE_PROCNAME ) );
+	return reinterpret_cast<CreateInterfaceFn>( Sys_GetProcAddress( pModuleName, CREATEINTERFACE_PROCNAME ) );
 #elif defined(POSIX)
 	// see Sys_GetFactory( CSysModule *pModule ) for an explanation
 	return (CreateInterfaceFn)( Sys_GetProcAddress( pModuleName, CREATEINTERFACE_PROCNAME ) );
@@ -486,7 +447,7 @@ bool Sys_LoadInterface(
 		return false;
 	}
 
-	*pOutInterface = fn( pInterfaceVersionName, NULL );
+	*pOutInterface = fn( pInterfaceVersionName, nullptr );
 	if ( !( *pOutInterface ) )
 	{
 		Sys_UnloadModule( pMod );
@@ -508,7 +469,7 @@ bool Sys_LoadInterface(
 //-----------------------------------------------------------------------------
 CDllDemandLoader::CDllDemandLoader( char const *pchModuleName ) : 
 	m_pchModuleName( pchModuleName ), 
-	m_hModule( 0 ),
+	m_hModule( nullptr ),
 	m_bLoadAttempted( false )
 {
 }
@@ -528,7 +489,7 @@ CreateInterfaceFn CDllDemandLoader::GetFactory()
 
 	if ( !m_hModule )
 	{
-		return NULL;
+		return nullptr;
 	}
 
 	return Sys_GetFactory( m_hModule );
@@ -539,7 +500,7 @@ void CDllDemandLoader::Unload()
 	if ( m_hModule )
 	{
 		Sys_UnloadModule( m_hModule );
-		m_hModule = 0;
+		m_hModule = nullptr;
 	}
 }
 

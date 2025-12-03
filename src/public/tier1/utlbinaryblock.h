@@ -1,4 +1,4 @@
-﻿//====== Copyright © 1996-2004, Valve Corporation, All rights reserved. =======
+﻿//====== Copyright Valve Corporation, All rights reserved. =======
 //
 // Purpose: 
 //
@@ -6,13 +6,10 @@
 
 #ifndef UTLBINARYBLOCK_H
 #define UTLBINARYBLOCK_H
-#ifdef _WIN32
-#pragma once
-#endif
 
-#include "tier1/utlmemory.h"
-#include "tier1/strtools.h"
-#include "limits.h"
+#include "utlmemory.h"
+#include "strtools.h"
+#include <climits>
 
 //-----------------------------------------------------------------------------
 // Base class, containing simple memory management
@@ -20,64 +17,71 @@
 class CUtlBinaryBlock
 {
 public:
-	CUtlBinaryBlock( int growSize = 0, int initSize = 0 );
+	CUtlBinaryBlock(intp growSize = 0, intp initSize = 0);
 
 	// NOTE: nInitialLength indicates how much of the buffer starts full
-	CUtlBinaryBlock( void* pMemory, int nSizeInBytes, int nInitialLength );
-	CUtlBinaryBlock( const void* pMemory, int nSizeInBytes );
-	CUtlBinaryBlock( const CUtlBinaryBlock& src );
+	CUtlBinaryBlock(void* pMemory, intp nSizeInBytes, intp nInitialLength);
+	CUtlBinaryBlock(const void* pMemory, intp nSizeInBytes);
+	CUtlBinaryBlock(const CUtlBinaryBlock& src);
 
-	void		Get( void *pValue, int nMaxLen ) const;
-	void		Set( const void *pValue, int nLen );
-	const void	*Get( ) const;
-	void		*Get( );
+	void		Get(void* pValue, intp nMaxLen) const;
+	void		Set(const void* pValue, intp nLen);
+	[[nodiscard]] const void* Get() const;
+	[[nodiscard]] void* Get();
 
-	unsigned char& operator[]( int i );
-	const unsigned char& operator[]( int i ) const;
+	// STL compatible member functions. These allow easier use of std::sort
+	// and they are forward compatible with the C++ 11 range-based for loops.
+	[[nodiscard]] unsigned char* begin() { return static_cast<unsigned char*>(Get()); }
+	[[nodiscard]] const unsigned char* begin() const { return static_cast<const unsigned char*>(Get()); }
+	[[nodiscard]] unsigned char* end() { return static_cast<unsigned char*>(Get()) + Length(); }
+	[[nodiscard]] const unsigned char* end() const { return static_cast<const unsigned char*>(Get()) + Length(); }
 
-	int			Length() const;
-	void		SetLength( int nLength );	// Undefined memory will result
-	bool		IsEmpty() const;
+	[[nodiscard]] unsigned char& operator[](intp i);
+	[[nodiscard]] const unsigned char& operator[](intp i) const;
+
+	[[nodiscard]] intp		Length() const;
+	void		SetLength(intp nLength);	// Undefined memory will result
+	[[nodiscard]] bool		IsEmpty() const;
 	void		Clear();
 	void		Purge();
 
-	bool		IsReadOnly() const;
+	[[nodiscard]] bool		IsReadOnly() const;
 
-	CUtlBinaryBlock &operator=( const CUtlBinaryBlock &src );
+	CUtlBinaryBlock& operator=(const CUtlBinaryBlock& src);
 
 	// Test for equality
-	bool operator==( const CUtlBinaryBlock &src ) const;
+	[[nodiscard]] bool operator==(const CUtlBinaryBlock& src) const;
 
 private:
 	CUtlMemory<unsigned char> m_Memory;
-	int m_nActualLength;
+	intp m_nActualLength;
 };
 
 
 //-----------------------------------------------------------------------------
 // class inlines
 //-----------------------------------------------------------------------------
-inline const void *CUtlBinaryBlock::Get( ) const
+inline const void* CUtlBinaryBlock::Get() const
 {
 	return m_Memory.Base();
 }
 
-inline void *CUtlBinaryBlock::Get( )
+inline void* CUtlBinaryBlock::Get()
 {
 	return m_Memory.Base();
 }
 
-inline int CUtlBinaryBlock::Length() const
+inline intp CUtlBinaryBlock::Length() const
 {
 	return m_nActualLength;
 }
 
-inline unsigned char& CUtlBinaryBlock::operator[]( int i )
+inline unsigned char& CUtlBinaryBlock::operator[](intp i)
 {
 	return m_Memory[i];
 }
 
-inline const unsigned char& CUtlBinaryBlock::operator[]( int i ) const
+inline const unsigned char& CUtlBinaryBlock::operator[](intp i) const
 {
 	return m_Memory[i];
 }
@@ -94,12 +98,12 @@ inline bool CUtlBinaryBlock::IsEmpty() const
 
 inline void CUtlBinaryBlock::Clear()
 {
-	SetLength( 0 );
+	SetLength(0);
 }
 
 inline void CUtlBinaryBlock::Purge()
 {
-	SetLength( 0 );
+	SetLength(0);
 	m_Memory.Purge();
 }
 

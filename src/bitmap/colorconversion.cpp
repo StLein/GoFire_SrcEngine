@@ -828,7 +828,8 @@ bool ConvertToATIxN(  const uint8 *src, ImageFormat srcImageFormat,
 					  uint8 *dst, ImageFormat dstImageFormat,
 					  int width, int height, int srcStride, int dstStride )
 {
-#if !defined( _X360 ) && !defined( POSIX )
+// TEMPFIX: disable ATI_TC in win64
+#if !defined( _X360 ) && !defined( POSIX ) && !defined( PLATFORM_64BITS )
 
 	// from rgb(a) to ATIxN
 	if( srcStride != 0 || dstStride != 0 )
@@ -877,7 +878,8 @@ bool ConvertToDXTLegacy(  const uint8 *src, ImageFormat srcImageFormat,
  						  uint8 *dst, ImageFormat dstImageFormat, 
 					      int width, int height, int srcStride, int dstStride )
 {
-#if !defined( _X360 ) && !defined( POSIX )
+// TEMPFIX: disable S3TCencode in win64
+#if !defined( _X360 ) && !defined( POSIX ) && !defined( PLATFORM_64BITS )
 	// from rgb(a) to dxtN
 	if( srcStride != 0 || dstStride != 0 )
 		return false;

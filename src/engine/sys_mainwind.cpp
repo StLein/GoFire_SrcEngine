@@ -510,11 +510,15 @@ void VCR_HandlePlaybackMessages(
 // FIXME: It would be nice to remove the need for this, which we can do
 // if we can make unicode work when running inside hammer.
 //-----------------------------------------------------------------------------
-static LONG WINAPI CallDefaultWindowProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
+//static LONG WINAPI CallDefaultWindowProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
+//{
+//	if ( unicode )
+//		return unicode->DefWindowProcW( hWnd, uMsg, wParam, lParam );
+//	return DefWindowProc( hWnd, uMsg, wParam, lParam );
+//}
+static LRESULT WINAPI CallDefaultWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	if ( unicode )
-		return unicode->DefWindowProcW( hWnd, uMsg, wParam, lParam );
-	return DefWindowProc( hWnd, uMsg, wParam, lParam );
+	return DefWindowProcW(hWnd, uMsg, wParam, lParam);
 }
 #endif
 

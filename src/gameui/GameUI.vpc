@@ -21,7 +21,7 @@ $Configuration
 
 	$Linker
 	{
-		$AdditionalDependencies			"$BASE Ws2_32.lib odbc32.lib odbccp32.lib Shlwapi.lib" [$WIN32]
+		$AdditionalDependencies			"$BASE Ws2_32.lib odbc32.lib odbccp32.lib Shlwapi.lib" [$WINDOWS]
 		$SystemLibraries				"iconv;z" [$OSXALL]	
 		$SystemLibraries				"rt" [$LINUXALL && !$DEDICATED]
 		$GCC_ExtraLinkerFlags			"-L/usr/lib32 -L/usr/lib" [$LINUXALL && !$DEDICATED]
@@ -223,8 +223,8 @@ $Project "GameUI"
 		$File	"OptionsSubDifficulty.h"
 		$File	"OptionsSubGame.cpp"
 		$File	"OptionsSubGame.h"
-		$File	"OptionsSubHaptics.cpp"	[$WIN32]
-		$File	"OptionsSubHaptics.h"	[$WIN32]
+		$File	"OptionsSubHaptics.cpp"	[$WINDOWS]
+		$File	"OptionsSubHaptics.h"	[$WINDOWS]
 		$File	"OptionsSubKeyboard.cpp"
 		$File	"OptionsSubKeyboard.h"
 		$File	"OptionsSubMouse.cpp"
@@ -248,13 +248,16 @@ $Project "GameUI"
 		$Lib	tier3
 		$Lib	vgui_controls
 		$Lib	vtf
-		$Lib  	"$LIBCOMMON/libjpeg"		[!$DEDICATED]
+		$Lib  	"$LIBCOMMON/libjpeg"		[$WIN32 && !$DEDICATED]
+		$Lib  	"$LIB3RDPARTY/libjpeg"		[$WIN64 && !$DEDICATED]
 		
-		$ImpLib "$LIBPUBLIC\x86\steam_api"
+		$ImpLib "$LIB3RDPARTY\steam_api"
 		$ImpLib "$LIBPUBLIC\x86\libpng"	[!$VS2015&&!$DEDICATED]
+		$Lib $LIB3RDPARTY/libpng [$VS2015&&!$DEDICATED]
 
-		$Lib $LIBCOMMON/libpng [$VS2015&&!$DEDICATED]
-		$Lib libz [!$DEDICATED]
+		$Lib libz [!$VS2015&&!$DEDICATED]
+		$Lib $LIB3RDPARTY/libz [$VS2015&&!$DEDICATED]
+		
 		$ImpLib SDL2 [$SDL]
 	}
 }

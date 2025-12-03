@@ -154,7 +154,7 @@ protected:
 	virtual void OnSetFocus();
 
 	// clickable url handling
-	int ParseTextStringForUrls(const char *text, int startPos, char *pchURLText, int cchURLText, char *pchURL, int cchURL, bool &clickable);
+	int ParseTextStringForUrls(const char *text, intp startPos, char *pchURLText, intp cchURLText, char *pchURL, intp cchURL, bool &clickable);
 	virtual void OnTextClicked(const wchar_t *text);
 
 #ifdef DBGFLAG_VALIDATE

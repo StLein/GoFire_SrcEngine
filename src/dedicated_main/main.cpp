@@ -90,19 +90,22 @@ int APIENTRY WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
 #ifdef _DEBUG
 	int len =
 #endif
-	_snprintf( szBuffer, sizeof( szBuffer ) - 1, "PATH=%s\\bin\\;%s", pRootDir, pPath );
+	_snprintf( szBuffer, sizeof( szBuffer ) - 1, "PATH=%s\\%s\\;%s", pRootDir, PLATFORM_BIN_DIR, pPath );
 	szBuffer[ ARRAYSIZE(szBuffer) - 1 ] = 0;
 	assert( len < 4096 );
 	_putenv( szBuffer );
 
-	HINSTANCE launcher = LoadLibrary("bin\\dedicated.dll"); // STEAM OK ... filesystem not mounted yet
+  	char launcher_dll_path[MAX_PATH];
+  	_snprintf_s(launcher_dll_path, _TRUNCATE, "%s\\" PLATFORM_BIN_DIR "\\dedicated.dll", pRootDir);
+
+	HINSTANCE launcher = LoadLibrary(launcher_dll_path); // STEAM OK ... filesystem not mounted yet
 	if (!launcher)
 	{
 		char *pszError;
 		FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, NULL, GetLastError(), MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPTSTR)&pszError, 0, NULL);
 
 		char szBuf[1024];
-		_snprintf(szBuf, sizeof( szBuf ) - 1, "Failed to load the launcher DLL:\n\n%s", pszError);
+		_snprintf(szBuf, sizeof( szBuf ) - 1, "Failed to load the launcher DLL:\n\n%s %s", pszError, launcher_dll_path);
 		szBuf[ ARRAYSIZE(szBuf) - 1 ] = 0;
 		MessageBox( 0, szBuf, "Launcher Error", MB_OK );
 

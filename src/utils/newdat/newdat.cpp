@@ -23,8 +23,8 @@ void Sys_Error( char *fmt, ... );
 extern void Con_Printf( char *fmt, ... );
 
 // So we can link CRC
-int LittleLongFn( int l );
-int (*LittleLong)(int l) = LittleLongFn;
+//int LittleLongFn( int l );
+//int (*LittleLong)(int l) = LittleLongFn;
 
 
 // So we can link CRC

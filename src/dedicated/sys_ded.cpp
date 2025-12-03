@@ -470,12 +470,13 @@ bool CDedicatedSteamApplication::Create( )
 //-----------------------------------------------------------------------------
 int main(int argc, char **argv)
 {
-#ifndef POSIX
-	_asm
-	{
+	// clang-format off
+#if !defined(POSIX) && !defined(_WIN64)
+	__asm {
 		fninit
 	}
 #endif
+	// clang-format on
 
 	SetupFPUControlWord();
 

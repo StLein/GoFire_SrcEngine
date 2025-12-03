@@ -29,6 +29,7 @@ $Group "fire_engine"
 $Group "game_cstrike"
 {
 	"engine"
+	"replay_common"
 	
 	// launcher
 	"launcher"
@@ -49,6 +50,7 @@ $Group "fire_tools"
 	// lib
     "zlib"
 	"zstd"
+	"bzip2"
 	"bitmap"
 	// "socketlib"
 

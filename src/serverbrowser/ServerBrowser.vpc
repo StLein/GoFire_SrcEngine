@@ -13,15 +13,17 @@ $Configuration
 {
 	$Compiler
 	{
-		$PreprocessorDefinitions			"$BASE;VERSION_SAFE_STEAM_API_INTERFACES;SERVERBROWSER_EXPORTS;GAME_SRC;_USE_32BIT_TIME_T"
+		$PreprocessorDefinitions			"$BASE;VERSION_SAFE_STEAM_API_INTERFACES;SERVERBROWSER_EXPORTS;GAME_SRC" [$WINDOWS]
+		$PreprocessorDefinitions			"$BASE;_USE_32BIT_TIME_T" [!$WIN64]
 	}
 
 	$Linker
 	{
-		$AdditionalDependencies				"$BASE Advapi32.lib wsock32.lib Ws2_32.lib User32.lib" [$WIN32]
+		$AdditionalDependencies				"$BASE Advapi32.lib Shell32.lib User32.lib Wsock32.lib Ws2_32.lib" [$WINDOWS]
 		$AdditionalDependencies				"$BASE Xonline.lib" [$X360]
-		$SystemLibraries                                                        "iconv" [$OSXALL]
+		$SystemLibraries					"iconv" [$OSXALL]
 	}
+
 }
 
 $Project "ServerBrowser"
@@ -97,7 +99,7 @@ $Project "ServerBrowser"
 
 	$Folder "Link Libraries"
 	{
-		$ImpLib "$LIBPUBLIC\x86\steam_api"
+		$ImpLib "$LIB3RDPARTY\steam_api"
 		$Lib	tier2
 		$Lib	tier3
 		$Lib	vgui_controls

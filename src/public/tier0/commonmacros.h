@@ -40,6 +40,28 @@ inline bool IsPowerOfTwo( T value )
 	return (value & ( value - (T)1 )) == (T)0;
 }
 
+// dimhotepus: ssize support.
+#ifdef __cpp_lib_ssize
+// C++20 ssize
+using std::ssize;
+#else
+#include <type_traits>
+
+template <class C>
+constexpr auto ssize(const C& c) noexcept(noexcept(c.size()))
+    -> std::common_type_t<std::ptrdiff_t,
+                          std::make_signed_t<decltype(c.size())>> {
+  using R = std::common_type_t<std::ptrdiff_t,
+                               std::make_signed_t<decltype(c.size())>>;
+  return static_cast<R>(c.size());
+}
+
+template <class T, std::ptrdiff_t N>
+constexpr std::ptrdiff_t ssize(const T (&)[N]) noexcept {
+  return N;
+}
+#endif
+
 #ifndef REFERENCE
 #define REFERENCE(arg) ((void)arg)
 #endif
@@ -170,5 +192,87 @@ T ClampedArrayElement( const T (&buffer)[N], unsigned int uIndex )
 		uIndex = N - 1;
 	return buffer[ uIndex ];
 }
+
+// MSVC specific.
+#ifdef COMPILER_MSVC
+/*
+ * @brief Begins MSVC warning override scope.
+ */
+#define MSVC_BEGIN_WARNING_OVERRIDE_SCOPE() __pragma(warning(push))
+
+/*
+ * @brief Disables MSVC warning.
+ */
+#define MSVC_DISABLE_WARNING(warning_level) \
+  __pragma(warning(disable : warning_level))
+
+/*
+ * @brief Ends MSVC warning override scope.
+ */
+#define MSVC_END_WARNING_OVERRIDE_SCOPE() __pragma(warning(pop))
+
+/*
+ * @brief Disable MSVC warning for code.
+ */
+#define MSVC_SCOPED_DISABLE_WARNING(warning_level, code) \
+  MSVC_BEGIN_WARNING_OVERRIDE_SCOPE()                    \
+  MSVC_DISABLE_WARNING(warning_level)                    \
+  code MSVC_END_WARNING_OVERRIDE_SCOPE()
+#endif
+
+#if defined(__clang__) || defined(__GCC__)
+/*
+ * @brief Begins GCC / Clang warning override scope.
+ */
+#define SRC_GCC_BEGIN_WARNING_OVERRIDE_SCOPE() _Pragma("GCC diagnostic push")
+
+/*
+ * @brief Disables GCC / Clang cast-function-type-mismatch.
+ */
+#define SRC_GCC_DISABLE_CAST_FUNCTION_TYPE_MISMATCH_WARNING() \
+  _Pragma("GCC diagnostic ignored \"-Wcast-function-type-mismatch\"")
+
+/*
+ * @brief Disables GCC / Clang overloaded-virtual.
+ */
+#define SRC_GCC_DISABLE_OVERLOADED_VIRTUAL_WARNING() \
+  _Pragma("GCC diagnostic ignored \"-Woverloaded-virtual\"")
+
+/*
+ * @brief Disables GCC / Clang switch warning.
+ */
+#define SRC_GCC_DISABLE_SWITCH_WARNING() \
+  _Pragma("GCC diagnostic ignored \"-Wswitch\"")
+
+/*
+ * @brief Ends GCC / Clang warning override scope.
+ */
+#define SRC_GCC_END_WARNING_OVERRIDE_SCOPE() _Pragma("GCC diagnostic pop")
+#else
+/*
+ * @brief Do nothing.
+ */
+#define SRC_GCC_BEGIN_WARNING_OVERRIDE_SCOPE()
+
+/*
+ * @brief Do nothing.
+ */
+#define SRC_GCC_DISABLE_CAST_FUNCTION_TYPE_MISMATCH_WARNING()
+
+/*
+ * @brief Do nothing.
+ */
+#define SRC_GCC_DISABLE_OVERLOADED_VIRTUAL_WARNING()
+
+/*
+ * @brief Do nothing.
+ */
+#define SRC_GCC_DISABLE_SWITCH_WARNING()
+
+/*
+ * @brief Do nothing.
+ */
+#define SRC_GCC_END_WARNING_OVERRIDE_SCOPE()
+#endif
 
 #endif // COMMONMACROS_H

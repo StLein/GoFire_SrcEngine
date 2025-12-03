@@ -54,4 +54,9 @@ $Project "bitmap"
 		$Lib "$LIBPUBLIC\x86\nvtc"
 		$Lib "$LIBPUBLIC\x86\ATI_Compress_MT_VC10"
 	}
+	$Folder "Link Libraries" [$WIN64]
+	{
+		$Lib "$LIB3RDPARTY\nvtc"
+		$Lib "$LIB3RDPARTY\ati_compress_mt_vc10"
+	}
 }

@@ -368,7 +368,12 @@ void CEngine::Frame( void )
 #if defined(POSIX)
 					__asm( "pause" ); __asm( "pause" ); __asm( "pause" ); __asm( "pause" );
 #elif defined(IS_WINDOWS_PC)
-					_asm { pause }; _asm { pause }; _asm { pause }; _asm { pause };
+					ThreadPause();
+					ThreadPause();
+					ThreadPause();
+					ThreadPause();
+					ThreadPause();
+					// _asm { pause }; _asm { pause }; _asm { pause }; _asm { pause };
 #endif
 				}
 			}

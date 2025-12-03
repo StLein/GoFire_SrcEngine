@@ -377,7 +377,8 @@ private:
 	public:
 		CThreadLocal()
 		{
-			COMPILE_TIME_ASSERT( sizeof(T) == sizeof(void *) );
+			//COMPILE_TIME_ASSERT( sizeof(T) == sizeof(void *) );
+			COMPILE_TIME_ASSERT(sizeof(T) <= sizeof(void*));
 		}
 
 		T Get() const

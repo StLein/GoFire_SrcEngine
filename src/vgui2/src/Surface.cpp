@@ -2493,7 +2493,8 @@ void CWin32Surface::CreatePopup(VPANEL panel, bool minimised, bool showTaskbarIc
 	plat->textureDC = NULL;
 
 	::SetBkMode(plat->hdc, TRANSPARENT);
-	::SetWindowLong(plat->hwnd, GWL_USERDATA, (LONG)g_pIVgui->PanelToHandle(panel));
+	//::SetWindowLong(plat->hwnd, GWL_USERDATA, (LONG)g_pIVgui->PanelToHandle(panel));
+	::SetWindowLongPtr(plat->hwnd, GWLP_USERDATA, (LONG_PTR)g_pIVgui->PanelToHandle(panel));
 	::SetTextAlign(plat->hdc, TA_LEFT | TA_TOP | TA_UPDATECP);
 	
 	if (!((VPanel *)panel)->IsVisible() || panel == _embeddedPanel)
@@ -2514,7 +2515,8 @@ void CWin32Surface::CreatePopup(VPANEL panel, bool minimised, bool showTaskbarIc
 	else
 	{
 		// somehow getting added twice, fundamental problem
-		_asm int 3;
+		//_asm int 3;
+		DebuggerBreak();
 	}
 
 	// hack, force a windows sound to be played
@@ -2571,7 +2573,7 @@ void CWin32Surface::ReleasePanel(VPANEL panel)
 		SetPanelVisible(panel, false);
 
 		// free all the windows/bitmap/DC handles we are using
-		::SetWindowLong(plat->hwnd, GWL_USERDATA, (LONG)-1);
+		::SetWindowLongPtr(plat->hwnd, GWLP_USERDATA, (LONG_PTR)INVALID_PANEL);
 		::SetWindowPos(plat->hwnd, HWND_BOTTOM, 0, 0, 1, 1, SWP_NOREDRAW|SWP_HIDEWINDOW);
 
 		// free the window context
@@ -3721,7 +3723,8 @@ static LRESULT CALLBACK staticProc(HWND hwnd,UINT msg,WPARAM wparam,LPARAM lpara
 
 	if (staticSurfaceAvailable)
 	{
-		panel = g_pIVgui->HandleToPanel(::GetWindowLong(hwnd, GWL_USERDATA));
+		//panel = g_pIVgui->HandleToPanel(::GetWindowLong(hwnd, GWL_USERDATA));
+		panel = g_pIVgui->HandleToPanel(static_cast<HPanel>(::GetWindowLongPtr(hwnd, GWLP_USERDATA)));
 
 		if (panel)
 		{

@@ -7,6 +7,8 @@
 $Macro SRCDIR		"..\.."
 $Macro OUTBINDIR	"$SRCDIR\..\game\bin"
 $Macro OUTBINNAME	"shaderapidx9"
+$Macro LIBBZSRCDIR		"$SRCDIR\thirdparty\bzip2"
+$Macro LIBBZOUTDIR		"$LIBBZSRCDIR"
 
 $include "$SRCDIR\vpc_scripts\source_dll_base.vpc"
 
@@ -16,11 +18,11 @@ $Configuration
 {
 	$Compiler
 	{
-		$AdditionalIncludeDirectories	"$BASE;$SRCDIR\DX9SDK\Include" [$WIN32 && !$GL]
+		$AdditionalIncludeDirectories	"$BASE;$SRCDIR\DX9SDK\Include" [$WINDOWS && !$GL]
 		$AdditionalIncludeDirectories	"$BASE;$SRCDIR\x360xdk\include\xbox" [$X360]
 		$AdditionalIncludeDirectories	"$BASE;..\"
 		$PreprocessorDefinitions		"$BASE;SHADERAPIDX9;SHADER_DLL_EXPORT;PROTECTED_THINGS_ENABLE;strncpy=use_Q_strncpy_instead;_snprintf=use_Q_snprintf_instead"
-		$PreprocessorDefinitions		"$BASE;USE_ACTUAL_DX" [($WIN32||$X360) && !$GL]
+		$PreprocessorDefinitions		"$BASE;USE_ACTUAL_DX" [($WINDOWS||$X360) && !$GL]
 		$PreprocessorDefinitions		"$BASE;GL_GLEXT_PROTOTYPES;DX_TO_GL_ABSTRACTION" [$GL]
 //		$AdditionalOptions		"/FC"
 	}
@@ -30,7 +32,7 @@ $Configuration
 		$SystemLibraries                    "iconv" [$OSXALL]
 		$GCC_ExtraLinkerFlags                   		"-L/usr/lib32" [$LINUXALL]
 		$SystemFrameworks					"Carbon;OpenGL;Quartz;Cocoa;IOKit" [$OSXALL]
-		$AdditionalDependencies				"$BASE ws2_32.lib" [$WIN32]
+		$AdditionalDependencies				"$BASE ws2_32.lib" [$WINDOWS]
 	}
 }
 
@@ -59,7 +61,7 @@ $Project "shaderapidx9"
 		$File	"hardwareconfig.cpp"
 		$File	"meshbase.cpp"
 		$File	"meshdx8.cpp"
-		$File	"recording.cpp"								[$WIN32 && !$GL]
+		$File	"recording.cpp"								[$WINDOWS && !$GL]
 		$File	"shaderapidx8.cpp"
 		$File	"shaderdevicebase.cpp"
 		$File	"shaderapibase.cpp"
@@ -70,9 +72,9 @@ $Project "shaderapidx9"
 		$File	"cvballoctracker.cpp"
 		$File	"vertexdecl.cpp"
 		$File	"vertexshaderdx8.cpp"
-		$File	"wmi.cpp"									[$WIN32 && !$GL]
+		$File	"wmi.cpp"									[$WINDOWS && !$GL]
 		$File	"textureheap.cpp"							[$X360]
-		$File	"winutils.cpp"							[!$WIN32]
+		$File	"winutils.cpp"							[!$WINDOWS]
 	}
 
 	$Folder	"DirectX Header Files" [$WIN32 && !$GL]
@@ -122,17 +124,19 @@ $Project "shaderapidx9"
 		$File	"stubd3ddevice.h"
 		$File	"texturedx8.h"
 		$File	"vertexshaderdx8.h"
-		$File	"wmi.h"							[$WIN32 && !$GL]
+		$File	"wmi.h"							[$WINDOWS && !$GL]
 		$File	"textureheap.h"					[$X360]
-		$File	"winutils.h"				[!$WIN32]
+		$File	"winutils.h"				[!$WINDOWS]
 	}
 
-	$Folder	"Link Libraries" [$WIN32]
+	$Folder	"Link Libraries" [$WINDOWS]
 	{
 
 		$File	"$SRCDIR\DX9SDK\Lib\x86\d3d9.lib" [$WIN32 && !$GL]
+		$File	"$SRCDIR\DX9SDK\Lib\x64\d3d9.lib" [$WIN64 && !$GL]
 		$File	"$SRCDIR\DX9SDK\Lib\x86\d3dx9.lib" [$WIN32 && !$GL&&!$VS2015]
-		$File	"$LIBCOMMON\d3dx9.lib" [$WIN32 && !$GL &&$VS2015]
+		$File	"$SRCDIR\DX9SDK\Lib\x64\d3dx9.lib" [$WIN64 && !$GL &&$VS2015]
+		// $File	"$LIBCOMMON\d3dx9.lib" [$WINDOWS && !$GL &&$VS2015]
 	}
 	
 	$Folder "Link Libraries"

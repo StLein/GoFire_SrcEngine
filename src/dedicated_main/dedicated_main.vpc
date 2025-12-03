@@ -6,7 +6,8 @@
 
 $Macro SRCDIR		".."
 $Macro OUTBINDIR	"$SRCDIR\..\game"
-$Macro OUTBINNAME	"srcds" [$WINDOWS||$X360]
+$Macro OUTBINNAME	"srcds" [$WIN32||$X360]
+$Macro OUTBINNAME	"srcds_win64" [$WIN64||$X360]
 $Macro OUTBINNAME	"srcds_osx" [$OSXALL]
 $Macro OUTBINNAME	"srcds_linux" [$LINUXALL]
 
@@ -20,8 +21,8 @@ $Configuration
 	$Linker [$WINDOWS]
 	{
 		$AdditionalDependencies				"$BASE Advapi32.lib"
-		$EnableLargeAddresses		"Support Addresses Larger Than 2 Gigabytes (/LARGEADDRESSAWARE)"
-		$FixedBaseAddress			"Generate a relocation section (/FIXED:NO)"
+		$EnableLargeAddresses		"Support Addresses Larger Than 2 Gigabytes (/LARGEADDRESSAWARE)" [$WIN32]
+		$FixedBaseAddress			"Generate a relocation section (/FIXED:NO)" [$WIN32]
 	}
 }
 

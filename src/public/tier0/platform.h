@@ -159,6 +159,44 @@
 	#error
 #endif
 
+
+#if PLATFORM_WINDOWS_PC
+
+# if PLATFORM_64BITS
+#  define PLATFORM_DIR "\\x64"
+# else
+#  define PLATFORM_DIR ""
+# endif
+
+//#elif PLATFORM_LINUX
+#elif LINUX
+
+# if PLATFORM_64BITS
+#  define PLATFORM_DIR "/linux64"
+# else
+#  define PLATFORM_DIR ""
+# endif
+
+//#elif PLATFORM_OSX
+#elif OSX
+
+#if PLATFORM_ARM
+#  define PLATFORM_DIR "/osxarm64"
+#else
+# if PLATFORM_64BITS
+#  define PLATFORM_DIR "/osx64"
+# else
+#  define PLATFORM_DIR ""
+# endif
+#endif
+
+#else
+# error "Define a platform dir for me!"
+#endif
+
+#define PLATFORM_BIN_DIR "bin" PLATFORM_DIR
+
+
 typedef unsigned char uint8;
 typedef signed char int8;
 

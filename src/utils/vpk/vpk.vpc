@@ -52,7 +52,7 @@ $Project "Vpk"
 		$File	"packtest.cpp"
 	}
 
-	$Folder	"Link Libraries" [$WIN32 || $POSIX]
+	$Folder	"Link Libraries" [$WINDOWS || $POSIX]
 	{
 		$Lib	bitmap
 		$Lib	mathlib

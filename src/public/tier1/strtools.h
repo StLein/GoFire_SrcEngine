@@ -673,6 +673,12 @@ void V_StripExtension( const char *in, char *out, int outLen );
 void V_DefaultExtension( char *path, const char *extension, int pathStringLength );
 // Strips any current extension from path and ensures that extension is the new extension
 void V_SetExtension( char *path, const char *extension, int pathStringLength );
+// Strips any current extension from path and ensures that extension is the new extension
+template<intp pathSize>
+void V_SetExtension(INOUT_Z_ARRAY char(&path)[pathSize], IN_Z const char* extension)
+{
+	V_SetExtension(path, extension, pathSize);
+}
 // Removes any filename from path ( strips back to previous / or \ character )
 void V_StripFilename( char *path );
 // Remove the final directory from the path
@@ -726,7 +732,7 @@ void V_FixupPathName( OUT_Z_CAP(nOutLen) char *pOut, size_t nOutLen, const char 
 void V_AppendSlash( INOUT_Z_CAP(strSize) char *pStr, int strSize );
 
 // Returns true if the path is an absolute path.
-bool V_IsAbsolutePath( IN_Z const char *pPath );
+[[nodiscard]] bool V_IsAbsolutePath( IN_Z const char *pPath );
 
 // Scans pIn and replaces all occurences of pMatch with pReplaceWith.
 // Writes the result to pOut.

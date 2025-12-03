@@ -38,11 +38,13 @@ $Project
 			$Configuration "Release" { $ExcludedFromBuild "Yes" }
 		}
 		
-		$File "$SRCDIR\thirdparty\protobuf-2.6.1\bin\win64\2015\staticcrt\release\libprotobuf.lib" [$WIN64]
+		// $File "$SRCDIR\thirdparty\protobuf-2.6.1\bin\win64\2015\staticcrt\release\libprotobuf.lib" [$WIN64]
+		$File "$SRCDIR\thirdparty\protobuf-2.6.4\win64\release\libprotobuf.lib" [$WIN64]
 		{
 			$Configuration "Debug" 	{ $ExcludedFromBuild "Yes" }
 		}
-		$File "$SRCDIR\thirdparty\protobuf-2.6.1\bin\win64\2015\staticcrt\debug\libprotobuf.lib" [$WIN64]
+		// $File "$SRCDIR\thirdparty\protobuf-2.6.1\bin\win64\2015\staticcrt\debug\libprotobuf.lib" [$WIN64]
+		$File "$SRCDIR\thirdparty\protobuf-2.6.4\win64\debug\libprotobuf.lib" [$WIN64]
 		{
 			$Configuration "Release" { $ExcludedFromBuild "Yes" }
 		}
